@@ -49,5 +49,4 @@ class CargaExperimentos(EtapaPipeline[None, list[Experimento]]):
                     z = float(partes[4]),
                 )
                 observaciones.append(observacion)
-        return Experimento(nombre = nombre, observaciones=observaciones)    
-
+        return Experimento(nombre = nombre, observaciones=observaciones)
