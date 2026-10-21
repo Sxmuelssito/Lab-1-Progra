@@ -30,7 +30,6 @@ class CargaExperimentos(EtapaPipeline[None, list[Experimento]]):
             nombres = [f"UNI_CORR_500_0{numero}.txt" for numero in numero_experimentos]
         else:
             nombres = [f"uni_corr_500_{numero}.txt" for numero in numero_experimentos]
-
         for nombre in nombres: 
             ruta_archivo = carpeta + "/" + nombre
             experimentos.append(self.leer_archivo(ruta_archivo, nombre))
