@@ -13,15 +13,26 @@ class PreparacionTrayectorias(EtapaPipeline[list[Experimento], list[Experimento]
     def ejecutar(self, experimentos: list[Experimento], contexto: ContextoPipeline) -> list[Experimento]:
         """Prepara las observaciones y trayectorias de cada experimento."""
         for experimento in experimentos: 
-            organizadas = self._organizar_observaciones(experimento.observaciones)
+            validas = self._validar_observaciones(experimento.observaciones)
+            descartadas = len(experimento.observaciones) - len(validas)
+            organizadas = self._organizar_observaciones(validas)
             experimento.trayectorias = self._reconstruir_trayectorias(organizadas)
+            print(f"{experimento.nombre}: {descartadas} observaciones descartadas")
             print(f"{experimento.nombre}: {len(experimento.trayectorias)} trayectorias")
         return experimentos
 
     def _validar_observaciones(self, observaciones: list[Observacion],) -> list[Observacion]:
         """Valida y retorna las observaciones de un experimento."""
-        raise NotImplementedError
-
+        correctas = list(filter(lambda obs: (obs.id_peaton >= 0) and (obs.frame >= 0), observaciones))
+        vistas = {}
+        sin_repetidas = []
+        for obs in correctas:
+            clave = (obs.id_peaton, obs.frame)
+            if clave not in vistas: 
+                vistas[clave] = True 
+                sin_repetidas.append(obs)
+        return sin_repetidas
+                                
     def _organizar_observaciones(self, observaciones: list[Observacion],) -> dict[int, list[Observacion]]:
         """Organiza las observaciones por identificador de peatón."""
         organizadas = {}
@@ -29,10 +40,8 @@ class PreparacionTrayectorias(EtapaPipeline[list[Experimento], list[Experimento]
             if obs.id_peaton not in organizadas: 
                 organizadas[obs.id_peaton] = []
             organizadas[obs.id_peaton].append(obs)
-
         for id_peaton in organizadas:
             organizadas[id_peaton].sort(key=lambda obs: obs.frame)
-
         return organizadas
 
     def _reconstruir_trayectorias(self, observaciones_organizadas: dict[int, list[Observacion]],) -> list[Trayectoria]:
@@ -42,7 +51,6 @@ class PreparacionTrayectorias(EtapaPipeline[list[Experimento], list[Experimento]
             lista = observaciones_organizadas[id_peaton]
             if len(lista) >= 2:
                 trayectoria = Trayectoria(id_peaton=id_peaton, observaciones=lista)
-                trayectorias.append(trayectoria)
-                
+                trayectorias.append(trayectoria)      
         return trayectorias
     

@@ -17,7 +17,7 @@ class Pipeline:
         resultado: Any = None
         for etapa in self._etapas:
             nombre_etapa = type(etapa).__name__
-            print()
+            print("="*60)
             print(f"Ejecutando etapa: {nombre_etapa}")
             try:
                 resultado = etapa.ejecutar(resultado, contexto)
