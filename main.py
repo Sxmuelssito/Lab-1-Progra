@@ -58,7 +58,6 @@ def main(argumentos: Sequence[str] | None = None) -> int:
         ExportacionResultados(),
     ]
     pipeline = Pipeline(etapas)
-    
     print()
     print("Configuración seleccionada:")
     print(f"  Entrada: {contexto.ruta_entrada}")

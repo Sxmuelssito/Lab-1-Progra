@@ -26,7 +26,11 @@ class CargaExperimentos(EtapaPipeline[None, list[Experimento]]):
         """Carga los experimentos disponibles en la ruta recibida."""
         carpeta = str(ruta_entrada)
         experimentos = []
-        nombres = [f"UNI_CORR_500_0{numero}.txt" for numero in numero_experimentos]
+        if carpeta == 'data':
+            nombres = [f"UNI_CORR_500_0{numero}.txt" for numero in numero_experimentos]
+        else:
+            nombres = [f"uni_corr_500_{numero}.txt" for numero in numero_experimentos]
+
         for nombre in nombres: 
             ruta_archivo = carpeta + "/" + nombre
             experimentos.append(self.leer_archivo(ruta_archivo, nombre))
@@ -34,19 +38,19 @@ class CargaExperimentos(EtapaPipeline[None, list[Experimento]]):
 
     def leer_archivo(self, ruta_archivo, nombre):
         observaciones = []
-        archivo = open(ruta_archivo, 'r')
-        for linea in archivo: 
+        arch = open(ruta_archivo, 'r')
+        for linea in arch:
             linea = linea.strip()
-            if linea.startswith("#"):
-                pass
-            partes = linea.split()
-            if len(partes) == 5: 
-                observacion = Observacion(
-                    id_peaton = int(partes[0]),
-                    frame = int(partes[1]),
-                    x = float(partes[2]),
-                    y = float(partes[3]),
-                    z = float(partes[4]),
-                )
-                observaciones.append(observacion)
-        return Experimento(nombre = nombre, observaciones=observaciones)
+            if linea != "" and not linea.startswith("#"):
+                partes = linea.split()
+                if len(partes) == 5: 
+                    observacion = Observacion(
+                        id_peaton = int(partes[0]),
+                        frame = int(partes[1]),
+                        x = float(partes[2]),
+                        y = float(partes[3]),
+                        z = float(partes[4]),
+                    )
+                    observaciones.append(observacion)  
+        nombre_experimento = nombre.replace(".txt", "")
+        return Experimento(nombre = nombre_experimento, observaciones=observaciones)
