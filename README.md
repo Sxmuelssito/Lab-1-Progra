@@ -20,10 +20,15 @@ python3 main.py --input ./data --output ./results
 python3 main.py --input ./data --output ./results --fps 25
 ```
 
+```bash
+python3 main.py --input ./data_16fps --output ./results_16fps --fps 16
+```
+
+
 ## Mostrar ayuda
 
 ```bash
 python3 main.py --help
 ```
 
-Los comandos también pueden ejecutarse con `python` cuando corresponda.
+Los comandos también pueden ejecutarse con `python` o con `py` cuando corresponda.
