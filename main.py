@@ -10,7 +10,8 @@ from stages import (
 
     AnalisisIndividual,
     CargaExperimentos,
-
+    AnalisisEspacial,
+    ComparacionExperimentos,
     ExportacionResultados,
     PreparacionTrayectorias,
 )
@@ -54,11 +55,12 @@ def main(argumentos: Sequence[str] | None = None) -> int:
         CargaExperimentos(),
         PreparacionTrayectorias(),
         AnalisisIndividual(),
-        #...
+        AnalisisEspacial(),
+        ComparacionExperimentos(),
         ExportacionResultados(),
     ]
     pipeline = Pipeline(etapas)
-    print("="*60)
+    print("="*80)
     print("Configuración seleccionada:")
     print(f"  Entrada: {contexto.ruta_entrada}")
     print(f"  Salida: {contexto.ruta_salida}")

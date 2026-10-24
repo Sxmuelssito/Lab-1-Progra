@@ -7,7 +7,9 @@ from pipeline.contexto import ContextoPipeline
 from pipeline.etapa import EtapaPipeline
 from models.observacion import Observacion
 
-numero_experimentos = [5]
+
+experimentos_25fps = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+experimentos_16fps = [1, 3, 4, 5, 6, 7, 8, 9]
 
 
 class CargaExperimentos(EtapaPipeline[None, list[Experimento]]):
@@ -17,7 +19,7 @@ class CargaExperimentos(EtapaPipeline[None, list[Experimento]]):
         """Carga los experimentos indicados por la configuración."""
         experimentos = self._cargar_experimentos(contexto.ruta_entrada)
         print()
-        print(f"Se encotraron {len(experimentos)} experimentos")
+        print(f"Se encontraron {len(experimentos)} experimentos")
         for experimento in experimentos:
             print(f"Se cargó el experimento {experimento.nombre} con {len(experimento.observaciones)} observaciones")
         return experimentos
@@ -26,11 +28,11 @@ class CargaExperimentos(EtapaPipeline[None, list[Experimento]]):
         """Carga los experimentos disponibles en la ruta recibida."""
         carpeta = str(ruta_entrada)
         experimentos = []
-        if carpeta == 'data':
-            nombres = [f"UNI_CORR_500_0{numero}.txt" for numero in numero_experimentos]
+        if carpeta == "data_16fps":
+            nombres = [f"uni_corr_500_{numero}.txt" for numero in experimentos_16fps]
         else:
-            nombres = [f"uni_corr_500_{numero}.txt" for numero in numero_experimentos]
-        for nombre in nombres: 
+            nombres = [f"UNI_CORR_500_0{numero}.txt" for numero in experimentos_25fps]
+        for nombre in nombres:
             ruta_archivo = carpeta + "/" + nombre
             experimentos.append(self.leer_archivo(ruta_archivo, nombre))
         return experimentos
@@ -42,7 +44,7 @@ class CargaExperimentos(EtapaPipeline[None, list[Experimento]]):
             linea = linea.strip()
             if linea != "" and not linea.startswith("#"):
                 partes = linea.split()
-                if len(partes) == 5: 
+                if len(partes) == 5:
                     observacion = Observacion(
                         id_peaton = int(partes[0]),
                         frame = int(partes[1]),
@@ -50,6 +52,6 @@ class CargaExperimentos(EtapaPipeline[None, list[Experimento]]):
                         y = float(partes[3]),
                         z = float(partes[4]),
                     )
-                    observaciones.append(observacion)  
+                    observaciones.append(observacion)
         nombre_experimento = nombre.replace(".txt", "")
         return Experimento(nombre = nombre_experimento, observaciones=observaciones)
