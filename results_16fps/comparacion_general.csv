@@ -1,0 +1,11 @@
+indicador,valor
+cantidad_experimentos,8
+velocidad_media_todos_m_s,0.7341
+densidad_menor_p_m2,0.2464
+densidad_mayor_p_m2,2.5203
+velocidad_con_menor_densidad_m_s,1.4222
+velocidad_con_mayor_densidad_m_s,0.3302
+flujo_con_menor_densidad_p_s,2.141
+flujo_con_mayor_densidad_p_s,1.3202
+flujo_maximo_p_s,6.0421
+densidad_con_flujo_maximo_p_m2,1.2217
